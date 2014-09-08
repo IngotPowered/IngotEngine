@@ -8,6 +8,7 @@ import com.ingotpowered.net.packets.login.Packet1Encryption;
 import com.ingotpowered.net.packets.ping.Packet0Status;
 import com.ingotpowered.net.packets.ping.Packet1Ping;
 import com.ingotpowered.net.packets.play.PacketChat;
+import com.ingotpowered.net.packets.play.PacketPluginMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -59,6 +60,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             switch (ident) {
                 case 1:
                     packet = new PacketChat(); break;
+                case 11:
+                    packet = new PacketPluginMessage(); break;
                 default:
                     throw new Exception("Unknown packet ID during PLAY " + ident);
             }

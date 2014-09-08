@@ -13,6 +13,7 @@ import com.ingotpowered.net.packets.login.Packet2LoginSuccess;
 import com.ingotpowered.net.packets.ping.Packet0Status;
 import com.ingotpowered.net.packets.ping.Packet1Ping;
 import com.ingotpowered.net.packets.play.PacketChat;
+import com.ingotpowered.net.packets.play.PacketPluginMessage;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -89,9 +90,6 @@ public class PacketHandler {
             response.verifyToken = verify;
             ingotPlayer.channel.pipeline().writeAndFlush(response);
         } else {
-            Packet2LoginSuccess response = new Packet2LoginSuccess();
-            response.username = ingotPlayer.username;
-            ingotPlayer.channel.pipeline().writeAndFlush(response);
             ingotPlayer.playerAuthenticated();
         }
     }
@@ -122,8 +120,9 @@ public class PacketHandler {
                 public void onSuccess(ChannelHandlerContext context, String data) {
                     String[] hackSplit = data.split(Pattern.quote("\""));
                     ingotPlayer.username = hackSplit[7];
-                    ingotPlayer.uuid = hackSplit[3];
                     ingotPlayer.base64Skin = hackSplit[17];
+                    String uuid = hackSplit[3];
+                    ingotPlayer.uuid = uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
                     ingotPlayer.playerAuthenticated();
                 }
             });
@@ -134,7 +133,11 @@ public class PacketHandler {
     }
 
     // -- BEGIN Player Play message --
-    public void chat(PacketChat chat) {
+    public void chat(PacketChat packet) {
 
+    }
+
+    public void pluginMessage(PacketPluginMessage packet) {
+        System.out.println("Plugin Message: " + packet.channel);
     }
 }

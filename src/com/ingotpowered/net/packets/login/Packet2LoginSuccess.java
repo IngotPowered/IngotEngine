@@ -11,9 +11,12 @@ public class Packet2LoginSuccess extends Packet {
     public String uuid;
 
     public void write(ByteBuf out) throws Exception {
+        if (username == null || uuid == null) {
+            System.out.println("FUCK");
+        }
         PacketConstants.writeVarInt(out, 2);
-        PacketConstants.writeString(out, username);
         PacketConstants.writeString(out, uuid);
+        PacketConstants.writeString(out, username);
     }
 
     public void handle(PacketHandler handler) { }

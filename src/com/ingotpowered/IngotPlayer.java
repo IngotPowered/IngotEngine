@@ -1,13 +1,17 @@
 package com.ingotpowered;
 
 import com.ingotpowered.api.Player;
+import com.ingotpowered.api.Position;
+import com.ingotpowered.api.definitions.Difficulty;
+import com.ingotpowered.api.definitions.Dimension;
+import com.ingotpowered.api.definitions.GameMode;
+import com.ingotpowered.api.definitions.LevelType;
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
 import com.ingotpowered.net.packets.login.Packet0Disconnect;
 import com.ingotpowered.net.packets.login.Packet2LoginSuccess;
-import com.ingotpowered.net.packets.login.Packet3Compression;
-import com.ingotpowered.net.packets.play.Packet64Disconnect;
+import com.ingotpowered.net.packets.play.*;
 import io.netty.channel.socket.SocketChannel;
 
 public class IngotPlayer implements Player {
@@ -20,6 +24,7 @@ public class IngotPlayer implements Player {
     public String uuid;
     public String username;
     public String base64Skin;
+    public Position compassSpawnPosition = new Position(0, 0, 0);
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -31,9 +36,17 @@ public class IngotPlayer implements Player {
         synchronized (IngotServer.server.playerMap) {
             IngotServer.server.playerMap.put(username, this);
         }
-        channel.write(new Packet2LoginSuccess());
-        channel.writeAndFlush(new Packet3Compression());
+        Packet2LoginSuccess response = new Packet2LoginSuccess();
+        response.username = username;
+        response.uuid = uuid;
+        System.out.println("UUID: " + uuid);
+        channel.pipeline().write(response);
         packetCodec.protoState = ProtoState.PLAY;
+        channel.write(new Packet1JoinGame(1, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
+        PacketPluginMessage serverType = new PacketPluginMessage();
+        serverType.channel = "MC|Brand";
+        serverType.message = new byte[] { 1, 3, 3, 7 };
+        channel.pipeline().writeAndFlush(serverType);
         System.out.println(username + " connected to the server");
     }
 
@@ -44,20 +57,25 @@ public class IngotPlayer implements Player {
         System.out.println(username + " disconnected from the server");
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUUID() {
-        return null;
-    }
-
     public void sendMessage(String message) {
         sendJSONMessage(JSON_CHAT_MESSAGE_BASE.replace("${message}", message));
     }
 
     public void sendJSONMessage(String json) {
 
+    }
+
+    public void setCompassSpawn(Position compassSpawnPosition) {
+        this.compassSpawnPosition = compassSpawnPosition;
+        channel.pipeline().writeAndFlush(new Packet5Spawn(compassSpawnPosition));
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getUUID() {
+        return null;
     }
 
     public String getBase64EncodedSkin() {

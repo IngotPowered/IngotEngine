@@ -8,5 +8,7 @@ public class WorldThread extends Thread {
         this.ingotWorld = ingotWorld;
     }
 
+    public void run() {
 
+    }
 }
