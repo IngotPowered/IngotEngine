@@ -10,8 +10,6 @@ public class Packet5Spawn extends Packet {
 
     public Position position;
 
-    public Packet5Spawn() { }
-
     public Packet5Spawn(Position position) {
         this.position = position;
     }

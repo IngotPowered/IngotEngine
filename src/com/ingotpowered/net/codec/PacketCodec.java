@@ -7,8 +7,7 @@ import com.ingotpowered.net.packets.login.Packet0LoginStart;
 import com.ingotpowered.net.packets.login.Packet1Encryption;
 import com.ingotpowered.net.packets.ping.Packet0Status;
 import com.ingotpowered.net.packets.ping.Packet1Ping;
-import com.ingotpowered.net.packets.play.PacketChat;
-import com.ingotpowered.net.packets.play.PacketPluginMessage;
+import com.ingotpowered.net.packets.play.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -29,6 +28,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     }
 
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        // Using switch to construct class normally rather than mapping classes results in a 56% to 430% speed increase
         int ident = PacketConstants.readVarInt(in);
         Packet packet = null;
         if (protoState == ProtoState.HANDSHAKE) {
@@ -58,11 +58,20 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             }
         } else if (protoState == ProtoState.PLAY) {
             switch (ident) {
+                case 0:
+                    packet = new Packet0KeepAlive(); break;
                 case 1:
                     packet = new PacketChat(); break;
-                case 11:
+                case 4:
+                    packet = new Packet4Position(); break;
+                case 6:
+                    packet = new Packet6PosOrient(); break;
+                case 21:
+                    packet = new Packet15ClientSettings(); break;
+                case 23:
                     packet = new PacketPluginMessage(); break;
                 default:
+                    System.out.println("Unknown packet ID " + ident);
                     throw new Exception("Unknown packet ID during PLAY " + ident);
             }
         }

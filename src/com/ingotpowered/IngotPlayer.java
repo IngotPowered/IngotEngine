@@ -14,6 +14,8 @@ import com.ingotpowered.net.packets.login.Packet2LoginSuccess;
 import com.ingotpowered.net.packets.play.*;
 import io.netty.channel.socket.SocketChannel;
 
+import java.nio.charset.Charset;
+
 public class IngotPlayer implements Player {
 
     public static final String JSON_CHAT_MESSAGE_BASE = "{\"text\":\"${message}\"}";
@@ -25,6 +27,11 @@ public class IngotPlayer implements Player {
     public String username;
     public String base64Skin;
     public Position compassSpawnPosition = new Position(0, 0, 0);
+    public String locale = "en_US";
+    public int viewDistance = 10;
+    public byte chatFlags = 0;
+    public boolean showingColors = true;
+    public byte displaySkinParts;
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -39,14 +46,12 @@ public class IngotPlayer implements Player {
         Packet2LoginSuccess response = new Packet2LoginSuccess();
         response.username = username;
         response.uuid = uuid;
-        System.out.println("UUID: " + uuid);
         channel.pipeline().write(response);
         packetCodec.protoState = ProtoState.PLAY;
-        channel.write(new Packet1JoinGame(1, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
-        PacketPluginMessage serverType = new PacketPluginMessage();
-        serverType.channel = "MC|Brand";
-        serverType.message = new byte[] { 1, 3, 3, 7 };
-        channel.pipeline().writeAndFlush(serverType);
+        channel.pipeline().write(new PacketPluginMessage("MC|Brand", "Ingot".getBytes(Charset.forName("UTF-8"))));
+        channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
+        channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
+        channel.pipeline().writeAndFlush(new Packet1JoinGame(1, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true)); // Send when ready to log in
         System.out.println(username + " connected to the server");
     }
 

@@ -10,6 +10,13 @@ public class PacketPluginMessage extends Packet {
     public String channel;
     public byte[] message;
 
+    public PacketPluginMessage() { }
+
+    public PacketPluginMessage(String channel, byte[] message) {
+        this.channel = channel;
+        this.message = message;
+    }
+
     public void read(ByteBuf in) throws Exception {
         channel = PacketConstants.readString(in);
         message = new byte[in.readableBytes()];

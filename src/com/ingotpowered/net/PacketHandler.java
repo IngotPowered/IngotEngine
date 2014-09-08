@@ -9,11 +9,9 @@ import com.ingotpowered.net.packets.handshake.Packet0Handshake;
 import com.ingotpowered.net.packets.login.Packet0Disconnect;
 import com.ingotpowered.net.packets.login.Packet0LoginStart;
 import com.ingotpowered.net.packets.login.Packet1Encryption;
-import com.ingotpowered.net.packets.login.Packet2LoginSuccess;
 import com.ingotpowered.net.packets.ping.Packet0Status;
 import com.ingotpowered.net.packets.ping.Packet1Ping;
-import com.ingotpowered.net.packets.play.PacketChat;
-import com.ingotpowered.net.packets.play.PacketPluginMessage;
+import com.ingotpowered.net.packets.play.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -133,11 +131,31 @@ public class PacketHandler {
     }
 
     // -- BEGIN Player Play message --
+    public void keepAlive(Packet0KeepAlive packet) {
+        ingotPlayer.channel.pipeline().writeAndFlush(packet);
+    }
+
+    public void clientSettings(Packet15ClientSettings packet) {
+        ingotPlayer.locale = packet.locale;
+        ingotPlayer.viewDistance = Math.min(packet.viewDistance, IngotServer.server.config.getViewDistance());
+        ingotPlayer.chatFlags = packet.chatFlags;
+        ingotPlayer.showingColors = packet.showChatColors;
+        ingotPlayer.displaySkinParts = packet.displaySkinParts;
+    }
+
     public void chat(PacketChat packet) {
 
     }
 
     public void pluginMessage(PacketPluginMessage packet) {
         System.out.println("Plugin Message: " + packet.channel);
+    }
+
+    public void positionUpdate(Packet4Position packet) {
+
+    }
+
+    public void positionAndOrientationUpdate(Packet6PosOrient packet) {
+
     }
 }

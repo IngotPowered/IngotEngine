@@ -54,6 +54,7 @@ public class Packet1JoinGame extends Packet {
 
     public void write(ByteBuf out) throws Exception {
         PacketConstants.writeVarInt(out, 1);
+        out.writeInt(entityId);
         out.writeByte(gameMode);
         out.writeByte(dimension);
         out.writeByte(difficulty);
