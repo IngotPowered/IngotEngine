@@ -43,6 +43,7 @@ public class PacketHandler {
     }
 
     public IngotPlayer ingotPlayer;
+    public int waitingPingId = -1;
 
     public PacketHandler(IngotPlayer ingotPlayer) {
         this.ingotPlayer = ingotPlayer;
@@ -132,7 +133,9 @@ public class PacketHandler {
 
     // -- BEGIN Player Play message --
     public void keepAlive(Packet0KeepAlive packet) {
-        ingotPlayer.channel.pipeline().writeAndFlush(packet);
+        if (packet.id == waitingPingId) {
+
+        }
     }
 
     public void clientSettings(Packet15ClientSettings packet) {
@@ -144,18 +147,22 @@ public class PacketHandler {
     }
 
     public void chat(PacketChat packet) {
-
+        System.out.println(packet);
     }
 
     public void pluginMessage(PacketPluginMessage packet) {
-        System.out.println("Plugin Message: " + packet.channel);
+
     }
 
     public void positionUpdate(Packet4Position packet) {
 
     }
 
-    public void positionAndOrientationUpdate(Packet6PosOrient packet) {
+    public void positionAndOrientationUpdate(PacketPlayerPosLook packet) {
+
+    }
+
+    public void heldItemChange(Packet9HeldItem packet) {
 
     }
 }

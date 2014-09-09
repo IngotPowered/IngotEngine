@@ -15,7 +15,7 @@ public abstract class Packet {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.getClass().getName() + "[  ");
+        sb.append(this.getClass().getCanonicalName() + "[ ");
         try {
             Field[] fields = this.getClass().getFields();
             for (Field f : fields) {
@@ -25,7 +25,7 @@ public abstract class Packet {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        sb.append("  ]");
+        sb.append(" ]");
         return sb.toString();
     }
 }

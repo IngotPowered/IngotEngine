@@ -24,6 +24,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     }
 
     protected void encode(ChannelHandlerContext context, Packet packet, ByteBuf buf) throws Exception {
+        System.out.println("OUT: " + packet.toString());
         packet.write(buf);
     }
 
@@ -65,7 +66,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                 case 4:
                     packet = new Packet4Position(); break;
                 case 6:
-                    packet = new Packet6PosOrient(); break;
+                    packet = new PacketPlayerPosLook(); break;
                 case 21:
                     packet = new Packet15ClientSettings(); break;
                 case 23:
@@ -76,6 +77,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             }
         }
         packet.read(in);
+        if (ident != 4)
+            System.out.println("IN: " + packet);
         packet.handle(handler);
     }
 

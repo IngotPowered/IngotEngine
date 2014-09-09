@@ -32,6 +32,7 @@ public class IngotPlayer implements Player {
     public byte chatFlags = 0;
     public boolean showingColors = true;
     public byte displaySkinParts;
+    public long ping = 0;
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -51,8 +52,16 @@ public class IngotPlayer implements Player {
         channel.pipeline().write(new PacketPluginMessage("MC|Brand", "Ingot".getBytes(Charset.forName("UTF-8"))));
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
         channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
-        channel.pipeline().writeAndFlush(new Packet1JoinGame(1, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true)); // Send when ready to log in
+        channel.pipeline().writeAndFlush(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true)); // Send when ready to log in
         System.out.println(username + " connected to the server");
+        //channel.pipeline().writeAndFlush(new Packet9HeldItem());
+        channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0));
+
+        // Chunk Test
+        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[] { }));
+        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[] { }));
+        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 1, (short) 0, new byte[] { }));
+        channel.pipeline().writeAndFlush(new Packet38ChunkBulk(false, 0, 0, 1, (short) 0, new byte[] { }));
     }
 
     public void playerDisconnected() {

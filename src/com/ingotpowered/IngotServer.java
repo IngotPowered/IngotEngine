@@ -14,7 +14,6 @@ public class IngotServer extends Ingot {
     public static void main(String[] args) {
         Ingot.setServer(server);
         server.init();
-
     }
 
     public Config config = new Config();
