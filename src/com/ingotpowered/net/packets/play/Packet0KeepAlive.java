@@ -9,6 +9,12 @@ public class Packet0KeepAlive extends Packet {
 
     public int id;
 
+    public Packet0KeepAlive() { }
+
+    public Packet0KeepAlive(int id) {
+        this.id = id;
+    }
+
     public void read(ByteBuf in) throws Exception {
         id = PacketConstants.readVarInt(in);
     }

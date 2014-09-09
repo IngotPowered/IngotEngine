@@ -24,7 +24,6 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     }
 
     protected void encode(ChannelHandlerContext context, Packet packet, ByteBuf buf) throws Exception {
-        System.out.println("OUT: " + packet.toString());
         packet.write(buf);
     }
 
@@ -63,8 +62,12 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                     packet = new Packet0KeepAlive(); break;
                 case 1:
                     packet = new PacketChat(); break;
+                case 3:
+                    packet = new Packet3GroundStatus(); break;
                 case 4:
                     packet = new Packet4Position(); break;
+                case 5:
+                    packet = new Packet5PlayerLook(); break;
                 case 6:
                     packet = new PacketPlayerPosLook(); break;
                 case 21:
@@ -72,13 +75,11 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                 case 23:
                     packet = new PacketPluginMessage(); break;
                 default:
-                    System.out.println("Unknown packet ID " + ident);
+                    handler.ingotPlayer.kick("Unknown packet ID during play: " + ident);
                     throw new Exception("Unknown packet ID during PLAY " + ident);
             }
         }
         packet.read(in);
-        if (ident != 4)
-            System.out.println("IN: " + packet);
         packet.handle(handler);
     }
 

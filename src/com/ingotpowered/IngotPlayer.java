@@ -33,6 +33,9 @@ public class IngotPlayer implements Player {
     public boolean showingColors = true;
     public byte displaySkinParts;
     public long ping = 0;
+    public boolean onGround = false;
+    public float yaw = 0f;
+    public float pitch = 0f;
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -52,14 +55,14 @@ public class IngotPlayer implements Player {
         channel.pipeline().write(new PacketPluginMessage("MC|Brand", "Ingot".getBytes(Charset.forName("UTF-8"))));
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
         channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
-        channel.pipeline().writeAndFlush(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true)); // Send when ready to log in
+        channel.pipeline().write(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
         System.out.println(username + " connected to the server");
         //channel.pipeline().writeAndFlush(new Packet9HeldItem());
-        channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0));
+        channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0)); // We're ready to spawn!
 
         // Chunk Test
-        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[] { }));
-        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[] { }));
+        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
+        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[Short.MAX_VALUE]));
         channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 1, (short) 0, new byte[] { }));
         channel.pipeline().writeAndFlush(new Packet38ChunkBulk(false, 0, 0, 1, (short) 0, new byte[] { }));
     }
@@ -69,6 +72,13 @@ public class IngotPlayer implements Player {
             IngotServer.server.playerMap.remove(username);
         }
         System.out.println(username + " disconnected from the server");
+    }
+
+    public void groundStateChange(boolean onGround) {
+        if (!this.onGround && onGround) {
+            sendMessage("Ouch!");
+        }
+        this.onGround = onGround;
     }
 
     public void sendMessage(String message) {

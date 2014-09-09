@@ -44,6 +44,7 @@ public class PacketHandler {
 
     public IngotPlayer ingotPlayer;
     public int waitingPingId = -1;
+    public long pingSentTimestamp = -1;
 
     public PacketHandler(IngotPlayer ingotPlayer) {
         this.ingotPlayer = ingotPlayer;
@@ -134,7 +135,7 @@ public class PacketHandler {
     // -- BEGIN Player Play message --
     public void keepAlive(Packet0KeepAlive packet) {
         if (packet.id == waitingPingId) {
-
+            ingotPlayer.ping = System.currentTimeMillis() - pingSentTimestamp;
         }
     }
 
@@ -147,7 +148,8 @@ public class PacketHandler {
     }
 
     public void chat(PacketChat packet) {
-        System.out.println(packet);
+        packet.message = IngotPlayer.JSON_CHAT_MESSAGE_BASE.replace("${message}", "<" + ingotPlayer.username + "> " + packet.message);
+        IngotServer.server.sendGlobalPacket(packet);
     }
 
     public void pluginMessage(PacketPluginMessage packet) {
@@ -164,5 +166,15 @@ public class PacketHandler {
 
     public void heldItemChange(Packet9HeldItem packet) {
 
+    }
+
+    public void playerLook(Packet5PlayerLook packet) {
+        ingotPlayer.groundStateChange(packet.onGround);
+        ingotPlayer.yaw = packet.yaw;
+        ingotPlayer.pitch = packet.pitch;
+    }
+
+    public void groundStatus(Packet3GroundStatus packet) {
+        ingotPlayer.groundStateChange(packet.onGround);
     }
 }
