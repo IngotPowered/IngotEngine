@@ -25,6 +25,8 @@ public class IngotPlayer implements Player {
     public PacketCodec packetCodec;
     public String uuid;
     public String username;
+    public String hostname;
+    public int port;
     public String base64Skin;
     public Position compassSpawnPosition = new Position(0, 0, 0);
     public String locale = "en_US";
@@ -131,6 +133,14 @@ public class IngotPlayer implements Player {
 
     public String getLocale() {
         return locale;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public Position getCompassSpawnPosition() {

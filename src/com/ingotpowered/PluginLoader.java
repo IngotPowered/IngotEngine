@@ -30,9 +30,6 @@ public class PluginLoader {
             }
             try {
                 ClassLoader loader = URLClassLoader.newInstance(new URL[] { jarFiles[i].toURI().toURL() });
-                /*System.out.println("Trying to load " + "jar:file:" + jarFiles[i].getAbsoluteFile() + File.separator + "plugin.yml");
-                BufferedReader br = new BufferedReader(new InputStreamReader(new URL("jar:file:/" + jarFiles[i].getAbsoluteFile() + "/plugin.yml").openConnection().getInputStream()));
-                */
                 BufferedReader br = new BufferedReader(new InputStreamReader(loader.getResourceAsStream("plugin.yml")));
                 String in;
                 boolean hasStart = false;
@@ -62,7 +59,9 @@ public class PluginLoader {
             }
         }
         for (Plugin p : plugins) {
+            long start = System.currentTimeMillis();
             p.onEnable();
+            System.out.println("Enabled " + p.getName() + ", took " + (System.currentTimeMillis() - start) + " milliseconds.");
         }
     }
 }

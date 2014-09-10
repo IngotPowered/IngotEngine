@@ -2,6 +2,7 @@ package com.ingotpowered.net;
 
 import com.ingotpowered.IngotPlayer;
 import com.ingotpowered.IngotServer;
+import com.ingotpowered.api.events.PlayerLoginAttemptEvent;
 import com.ingotpowered.net.codec.AesCodec;
 import com.ingotpowered.net.http.HttpHandler;
 import com.ingotpowered.net.http.HttpPostRequest;
@@ -51,6 +52,8 @@ public class PacketHandler {
     }
 
     public void handshake(Packet0Handshake packet) {
+        ingotPlayer.hostname = packet.hostname;
+        ingotPlayer.port = packet.port;
         if (packet.nextState == 1) {
             ingotPlayer.packetCodec.protoState = ProtoState.PING;
         } else if (packet.nextState == 2) {
@@ -82,16 +85,25 @@ public class PacketHandler {
             return;
         }
         ingotPlayer.username = packet.name;
-        if (IngotServer.server.config.isOnlineMode()) {
-            Packet1Encryption response = new Packet1Encryption();
-            response.publicKey = PacketHandler.publicKey.getEncoded();
-            byte[] verify = new byte[16];
-            random.nextBytes(verify);
-            response.verifyToken = verify;
-            ingotPlayer.channel.pipeline().writeAndFlush(response);
-        } else {
-            ingotPlayer.playerAuthenticated();
-        }
+        final PlayerLoginAttemptEvent event = new PlayerLoginAttemptEvent(ingotPlayer.username, ingotPlayer.hostname, (short) ingotPlayer.port);
+        IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+            public void run() {
+                if (event.isCancelled()) {
+                    ingotPlayer.kick(event.getDisconnectMessage());
+                    return;
+                }
+                if (IngotServer.server.config.isOnlineMode()) {
+                    Packet1Encryption response = new Packet1Encryption();
+                    response.publicKey = PacketHandler.publicKey.getEncoded();
+                    byte[] verify = new byte[16];
+                    random.nextBytes(verify);
+                    response.verifyToken = verify;
+                    ingotPlayer.channel.pipeline().writeAndFlush(response);
+                } else {
+                    ingotPlayer.playerAuthenticated();
+                }
+            }
+        });
     }
 
     public void startEncryption(Packet1Encryption packet) {
