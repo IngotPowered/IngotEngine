@@ -2,7 +2,7 @@ package com.ingotpowered.net;
 
 import com.ingotpowered.IngotPlayer;
 import com.ingotpowered.IngotServer;
-import com.ingotpowered.api.events.PlayerLoginAttemptEvent;
+import com.ingotpowered.api.events.list.PlayerLoginAttemptEvent;
 import com.ingotpowered.net.codec.AesCodec;
 import com.ingotpowered.net.http.HttpHandler;
 import com.ingotpowered.net.http.HttpPostRequest;
@@ -85,6 +85,7 @@ public class PacketHandler {
             return;
         }
         ingotPlayer.username = packet.name;
+        // IngotServer Event
         final PlayerLoginAttemptEvent event = new PlayerLoginAttemptEvent(ingotPlayer.username, ingotPlayer.hostname, (short) ingotPlayer.port);
         IngotServer.server.eventFactory.callEvent(event, new Runnable() {
             public void run() {

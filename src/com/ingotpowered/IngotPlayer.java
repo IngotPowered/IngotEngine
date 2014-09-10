@@ -6,6 +6,9 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
+import com.ingotpowered.api.events.list.PlayerGroundStateEvent;
+import com.ingotpowered.api.events.list.PlayerKickEvent;
+import com.ingotpowered.api.events.list.PlayerLoginEvent;
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
@@ -60,9 +63,12 @@ public class IngotPlayer implements Player {
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
         channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
         channel.pipeline().write(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
-        System.out.println(username + " connected to the server");
         //channel.pipeline().writeAndFlush(new Packet9HeldItem());
         channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0)); // We're ready to spawn!
+
+        // IngotServer Event
+        final PlayerLoginEvent event = new PlayerLoginEvent(this);
+        IngotServer.server.eventFactory.callEvent(event, null);
 
         // Chunk Test
         channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
@@ -79,9 +85,9 @@ public class IngotPlayer implements Player {
     }
 
     public void groundStateChange(boolean onGround) {
-        if (!this.onGround && onGround) {
-            sendMessage("Ouch!");
-        }
+        // IngotServer Event
+        PlayerGroundStateEvent event = new PlayerGroundStateEvent(this, this.onGround, onGround);
+        IngotServer.server.eventFactory.callEvent(event, null);
         this.onGround = onGround;
     }
 
@@ -90,7 +96,7 @@ public class IngotPlayer implements Player {
     }
 
     public void sendJSONMessage(String json) {
-
+        channel.pipeline().writeAndFlush(new PacketChat(json));
     }
 
     public void setCompassSpawn(Position compassSpawnPosition) {
@@ -118,7 +124,17 @@ public class IngotPlayer implements Player {
         if (packetCodec.protoState == ProtoState.LOGIN) {
             channel.pipeline().writeAndFlush(new Packet0Disconnect(reason));
         } else if (packetCodec.protoState == ProtoState.PLAY) {
-            channel.pipeline().writeAndFlush(new Packet64Disconnect(reason));
+            // IngotServer event
+            final PlayerKickEvent event = new PlayerKickEvent(this, reason);
+            IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+                public void run() {
+                    if (!event.isCancelled()) {
+                        channel.pipeline().writeAndFlush(new Packet64Disconnect(event.getKickMessage()));
+                        channel.close();
+                    }
+                }
+            });
+            return;
         }
         channel.close();
     }
