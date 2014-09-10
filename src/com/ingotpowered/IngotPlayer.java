@@ -36,6 +36,8 @@ public class IngotPlayer implements Player {
     public boolean onGround = false;
     public float yaw = 0f;
     public float pitch = 0f;
+    public boolean crouched = false;
+    public boolean sprinting = false;
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -117,5 +119,21 @@ public class IngotPlayer implements Player {
             channel.pipeline().writeAndFlush(new Packet64Disconnect(reason));
         }
         channel.close();
+    }
+
+    public boolean isOnGround() {
+        return onGround;
+    }
+
+    public long getPing() {
+        return ping;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public Position getCompassSpawnPosition() {
+        return compassSpawnPosition;
     }
 }

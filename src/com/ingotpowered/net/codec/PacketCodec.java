@@ -70,6 +70,10 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                     packet = new Packet5PlayerLook(); break;
                 case 6:
                     packet = new PacketPlayerPosLook(); break;
+                case 10:
+                    packet = new Packet10Animation(); break;
+                case 11:
+                    packet = new Packet11EntityAction(); break;
                 case 21:
                     packet = new Packet15ClientSettings(); break;
                 case 23:
@@ -80,6 +84,10 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             }
         }
         packet.read(in);
+        if (in.readableBytes() > 0) {
+            handler.ingotPlayer.kick("Sloppy! You sent " + in.readableBytes() + " extra bytes!");
+            return;
+        }
         packet.handle(handler);
     }
 

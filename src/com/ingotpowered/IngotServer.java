@@ -2,6 +2,8 @@ package com.ingotpowered;
 
 import com.ingotpowered.api.Config;
 import com.ingotpowered.api.Ingot;
+import com.ingotpowered.api.Player;
+import com.ingotpowered.api.events.EventFactory;
 import com.ingotpowered.net.packets.Packet;
 import com.ingotpowered.world.ChunkThread;
 import com.ingotpowered.net.NetManager;
@@ -23,7 +25,10 @@ public class IngotServer extends Ingot {
     public NetManager netManager = new NetManager(playerMap);
     public ThreadKeepAlive threadKeepAlive = new ThreadKeepAlive();
     public ChunkThread[] chunkThreads = new ChunkThread[Runtime.getRuntime().availableProcessors()];
+    public EventFactory eventFactory;
+    public PluginLoader pluginLoader = new PluginLoader();
     public ConsoleCommands consoleCommands = new ConsoleCommands();
+
 
     private void init() {
         config.load();
@@ -33,6 +38,8 @@ public class IngotServer extends Ingot {
             chunkThreads[i] = new ChunkThread();
             chunkThreads[i].start();
         }
+        eventFactory = new EventFactory();
+        pluginLoader.load();
         consoleCommands.startHandling();
     }
 
@@ -47,6 +54,10 @@ public class IngotServer extends Ingot {
         }
     }
 
+    public IngotPlayer getPlayer(String name) {
+        return playerMap.get(name);
+    }
+
     public void stop() {
         netManager.shutdown();
         threadKeepAlive.interrupt();
@@ -57,5 +68,9 @@ public class IngotServer extends Ingot {
 
     public Config getConfig() {
         return config;
+    }
+
+    public EventFactory getEventFactory() {
+        return eventFactory;
     }
 }

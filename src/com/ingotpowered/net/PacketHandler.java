@@ -177,4 +177,29 @@ public class PacketHandler {
     public void groundStatus(Packet3GroundStatus packet) {
         ingotPlayer.groundStateChange(packet.onGround);
     }
+
+    public void entityAction(Packet11EntityAction packet) {
+        switch (packet.actionId) {
+            case 0:
+                ingotPlayer.crouched = true; break;
+            case 1:
+                ingotPlayer.crouched = false; break;
+            case 2:
+                /* Leave Bed */ break;
+            case 3:
+                ingotPlayer.sprinting = true; break;
+            case 4:
+                ingotPlayer.sprinting = false; break;
+            case 5:
+                /* Jump w/ horse */ break;
+            case 6:
+                /* Open inventory */ break;
+            default:
+                ingotPlayer.kick("Unknown EntityAction " + (int) packet.actionId); break;
+        }
+    }
+
+    public void playerAnimation(Packet10Animation packet) {
+        ingotPlayer.sendMessage("You clicked something doe!");
+    }
 }
