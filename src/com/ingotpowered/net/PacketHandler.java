@@ -170,7 +170,7 @@ public class PacketHandler {
     }
 
     public void positionUpdate(Packet4Position packet) {
-
+        ingotPlayer.updatePositionAndOrientation(packet.x, packet.feetY, packet.z, ingotPlayer.yaw, ingotPlayer.pitch);
     }
 
     public void positionAndOrientationUpdate(PacketPlayerPosLook packet) {

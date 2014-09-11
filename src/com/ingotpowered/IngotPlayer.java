@@ -1,5 +1,6 @@
 package com.ingotpowered;
 
+import com.ingotpowered.api.Orientation;
 import com.ingotpowered.api.Player;
 import com.ingotpowered.api.Position;
 import com.ingotpowered.api.definitions.Difficulty;
@@ -9,6 +10,7 @@ import com.ingotpowered.api.definitions.LevelType;
 import com.ingotpowered.api.events.list.PlayerGroundStateEvent;
 import com.ingotpowered.api.events.list.PlayerKickEvent;
 import com.ingotpowered.api.events.list.PlayerLoginEvent;
+import com.ingotpowered.api.events.list.PlayerMoveEvent;
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
@@ -39,10 +41,14 @@ public class IngotPlayer implements Player {
     public byte displaySkinParts;
     public long ping = 0;
     public boolean onGround = false;
+    public double x = 0d;
+    public double y = 0d;
+    public double z = 0d;
     public float yaw = 0f;
     public float pitch = 0f;
     public boolean crouched = false;
     public boolean sprinting = false;
+    private Object movementLock = new Object();
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -89,6 +95,23 @@ public class IngotPlayer implements Player {
         PlayerGroundStateEvent event = new PlayerGroundStateEvent(this, this.onGround, onGround);
         IngotServer.server.eventFactory.callEvent(event, null);
         this.onGround = onGround;
+    }
+
+    public void updatePositionAndOrientation(final double x, final double y, final double z, final float yaw, final float pitch) {
+        final PlayerMoveEvent event = new PlayerMoveEvent(this, new Position(this.x, this.y, this.z), new Orientation(this.yaw, this.pitch), new Position(x, y, z), new Orientation(yaw, pitch));
+        IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+            public void run() {
+                if (event.isCancelled()) {
+                    channel.pipeline().writeAndFlush(new PacketPlayerPosLook(IngotPlayer.this.x, IngotPlayer.this.y, IngotPlayer.this.z, IngotPlayer.this.yaw, IngotPlayer.this.pitch, (byte) 0));
+                } else {
+                    IngotPlayer.this.x = x;
+                    IngotPlayer.this.y = y;
+                    IngotPlayer.this.z = z;
+                    IngotPlayer.this.yaw = yaw;
+                    IngotPlayer.this.pitch = pitch;
+                }
+            }
+        });
     }
 
     public void sendMessage(String message) {
