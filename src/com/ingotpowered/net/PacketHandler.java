@@ -161,8 +161,7 @@ public class PacketHandler {
     }
 
     public void chat(PacketChat packet) {
-        packet.message = IngotPlayer.JSON_CHAT_MESSAGE_BASE.replace("${message}", "<" + ingotPlayer.username + "> " + packet.message);
-        IngotServer.server.sendGlobalPacket(packet);
+        ingotPlayer.playerChat(packet.message);
     }
 
     public void pluginMessage(PacketPluginMessage packet) {

@@ -7,10 +7,7 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
-import com.ingotpowered.api.events.list.PlayerGroundStateEvent;
-import com.ingotpowered.api.events.list.PlayerKickEvent;
-import com.ingotpowered.api.events.list.PlayerLoginEvent;
-import com.ingotpowered.api.events.list.PlayerMoveEvent;
+import com.ingotpowered.api.events.list.*;
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
@@ -48,7 +45,6 @@ public class IngotPlayer implements Player {
     public float pitch = 0f;
     public boolean crouched = false;
     public boolean sprinting = false;
-    private Object movementLock = new Object();
 
     public IngotPlayer(SocketChannel channel) {
         this.channel = channel;
@@ -110,6 +106,19 @@ public class IngotPlayer implements Player {
                     IngotPlayer.this.yaw = yaw;
                     IngotPlayer.this.pitch = pitch;
                 }
+            }
+        });
+    }
+
+    public void playerChat(String message) {
+        final PlayerChatEvent event = new PlayerChatEvent(this, message);
+        IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+            public void run() {
+                if (event.isCancelled()) {
+                    return;
+                }
+                String finalMessage = JSON_CHAT_MESSAGE_BASE.replace("${message}", event.getFormat().replace("${0}", username).replace("${1}", event.getMessage()));
+                IngotServer.server.sendGlobalPacket(new PacketChat(finalMessage));
             }
         });
     }
