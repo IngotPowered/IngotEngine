@@ -5,16 +5,22 @@ import java.io.InputStreamReader;
 
 public class ConsoleCommands {
 
+    public boolean stopped = false;
+
     public void startHandling() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
+                if (stopped) {
+                    break;
+                }
                 dispatchConsoleCommand(br.readLine());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             IngotServer.server.stop();
         }
+        System.out.println("Console command handler has been shut down!");
     }
 
     public void dispatchConsoleCommand(String command) {
@@ -31,6 +37,10 @@ public class ConsoleCommands {
     }
 
     private void dispatchConsoleCommand(String commandName, String[] args) {
-        System.out.println("Unknown command '" + commandName + "'.");
+        if (commandName.equalsIgnoreCase("stop")) {
+            IngotServer.server.stop();
+        } else {
+            System.out.println("Unknown command '" + commandName + "'.");
+        }
     }
 }

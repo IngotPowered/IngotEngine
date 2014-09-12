@@ -47,6 +47,6 @@ public class NetManager {
     }
 
     public void shutdown() {
-        future.channel().close().syncUninterruptibly();
+        System.out.println(future.channel().close().syncUninterruptibly().isSuccess() ? "Network listener has been shut down." : "[ WARNING ] Could not shut down connection listener!");
     }
 }

@@ -65,7 +65,6 @@ public class IngotPlayer implements Player {
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
         channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
         channel.pipeline().write(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
-        //channel.pipeline().writeAndFlush(new Packet9HeldItem());
         channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0)); // We're ready to spawn!
 
         // IngotServer Event

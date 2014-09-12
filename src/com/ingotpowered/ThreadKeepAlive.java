@@ -30,5 +30,6 @@ public class ThreadKeepAlive extends Thread {
                 p.packetHandler.pingSentTimestamp = System.currentTimeMillis();
             }
         }
+        System.out.println("Player keep-alive thread shut down.");
     }
 }

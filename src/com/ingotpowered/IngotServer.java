@@ -59,11 +59,18 @@ public class IngotServer extends Ingot {
     }
 
     public void stop() {
+        consoleCommands.stopped = true;
         netManager.shutdown();
         threadKeepAlive.interrupt();
+        try {
+            threadKeepAlive.join();
+        } catch (Exception ex) { }
         for (ChunkThread c : chunkThreads) {
             c.interrupt();
         }
+        pluginLoader.unload();
+        eventFactory.destroyThreadPool();
+        System.exit(0);
     }
 
     public Config getConfig() {
