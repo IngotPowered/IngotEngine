@@ -39,7 +39,7 @@ public class ConsoleCommands {
     private void dispatchConsoleCommand(String commandName, String[] args) {
         if (commandName.equalsIgnoreCase("stop")) {
             IngotServer.server.stop();
-        } else {
+        } else if (!IngotServer.server.commandRegistry.runServerCommand(IngotServer.server, commandName, args)) {
             System.out.println("Unknown command '" + commandName + "'.");
         }
     }

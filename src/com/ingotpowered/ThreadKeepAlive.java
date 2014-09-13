@@ -21,12 +21,12 @@ public class ThreadKeepAlive extends Thread {
             Iterator<IngotPlayer> iterator = players.iterator();
             while (iterator.hasNext()) {
                 IngotPlayer p = iterator.next();
-                if (System.currentTimeMillis() - p.packetHandler.waitingPingId >= 10000) {
+                if (System.currentTimeMillis() - p.packetHandler.waitingPingId >= 30000) {
                     p.kick("Did not respond to ping in time");
                     continue;
                 }
                 p.packetHandler.waitingPingId = random.nextInt();
-                p.channel.pipeline().writeAndFlush(new Packet0KeepAlive(p.packetHandler.waitingPingId));
+                p.channel.pipeline().writeAndFlush(new Packet0KeepAlive(p.packetHandler.waitingPingId)).syncUninterruptibly();
                 p.packetHandler.pingSentTimestamp = System.currentTimeMillis();
             }
         }

@@ -3,6 +3,7 @@ package com.ingotpowered;
 import com.ingotpowered.api.Config;
 import com.ingotpowered.api.Ingot;
 import com.ingotpowered.api.Player;
+import com.ingotpowered.api.commands.CommandRegistry;
 import com.ingotpowered.api.events.EventFactory;
 import com.ingotpowered.net.packets.Packet;
 import com.ingotpowered.world.ChunkThread;
@@ -28,7 +29,7 @@ public class IngotServer extends Ingot {
     public EventFactory eventFactory;
     public PluginLoader pluginLoader = new PluginLoader();
     public ConsoleCommands consoleCommands = new ConsoleCommands();
-
+    public CommandRegistry commandRegistry = new CommandRegistry();
 
     private void init() {
         config.load();
@@ -71,6 +72,10 @@ public class IngotServer extends Ingot {
         pluginLoader.unload();
         eventFactory.destroyThreadPool();
         System.exit(0);
+    }
+
+    public CommandRegistry getCommandRegistry() {
+        return commandRegistry;
     }
 
     public Config getConfig() {
