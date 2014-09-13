@@ -2,10 +2,10 @@ package com.ingotpowered;
 
 import com.ingotpowered.api.Config;
 import com.ingotpowered.api.Ingot;
-import com.ingotpowered.api.Player;
 import com.ingotpowered.api.commands.CommandRegistry;
 import com.ingotpowered.api.events.EventFactory;
 import com.ingotpowered.net.packets.Packet;
+import com.ingotpowered.net.packets.play.PacketChat;
 import com.ingotpowered.world.ChunkThread;
 import com.ingotpowered.net.NetManager;
 
@@ -72,6 +72,11 @@ public class IngotServer extends Ingot {
         pluginLoader.unload();
         eventFactory.destroyThreadPool();
         System.exit(0);
+    }
+
+    public void broadcastMessage(String message) {
+        PacketChat packet = new PacketChat(IngotPlayer.JSON_CHAT_MESSAGE_BASE.replace("${message}", message));
+        sendGlobalPacket(packet);
     }
 
     public CommandRegistry getCommandRegistry() {
