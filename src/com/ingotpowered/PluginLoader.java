@@ -86,7 +86,18 @@ public class PluginLoader {
         }
         for (Plugin p : plugins) {
             long start = System.currentTimeMillis();
-            p.onEnable();
+            try {
+                p.onEnable();
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                try {
+                    p.handleException(ex);
+                }
+                catch(Exception ex2){
+                    ex2.printStackTrace();
+                }
+            }
             System.out.println("Enabled " + p.getName() + ", took " + (System.currentTimeMillis() - start) + " milliseconds.");
         }
     }
@@ -94,7 +105,18 @@ public class PluginLoader {
     public void unload() {
         System.out.println("========= Disabling all plugins =========");
         for (Plugin p : plugins) {
-            p.onDisable();
+            try {
+                p.onDisable();
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                try{
+                    p.handleException(ex);
+                }
+                catch(Exception ex2){
+                    ex2.printStackTrace();
+                }
+            }
         }
         System.out.println("==========================================");
     }
