@@ -45,7 +45,7 @@ public class PacketHandler {
 
     public IngotPlayer ingotPlayer;
     public int waitingPingId = -1;
-    public long pingSentTimestamp = -1;
+    public long pingSentTimestamp = System.currentTimeMillis() + 10000;
 
     public PacketHandler(IngotPlayer ingotPlayer) {
         this.ingotPlayer = ingotPlayer;
@@ -136,6 +136,7 @@ public class PacketHandler {
                     ingotPlayer.base64Skin = hackSplit[17];
                     String uuid = hackSplit[3];
                     ingotPlayer.uuid = uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
+                    System.out.println("UUID: " + ingotPlayer.uuid);
                     ingotPlayer.playerAuthenticated();
                 }
             });
