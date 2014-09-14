@@ -71,7 +71,7 @@ public class IngotWorld implements World {
 
     @Override
     public Block getBlock(double x, double y, double z) {
-        return getBlock(((int) x), ((int) y), ((int) z));
+        return getBlock(x<0?((int)x) - 1 : (int)x, y<0?((int)y) - 1 : (int)y, z<0?((int)z) - 1 : (int)z);
     }
 
     @Override
