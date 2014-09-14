@@ -1,5 +1,6 @@
 package com.ingotpowered.world;
 
+import com.ingotpowered.api.world.Block;
 import com.ingotpowered.api.world.Chunk;
 import com.ingotpowered.api.world.ChunkPosition;
 import com.ingotpowered.api.world.World;
@@ -28,5 +29,12 @@ public class IngotChunk implements Chunk{
     @Override
     public int getZ() {
         return position.getZ();
+    }
+
+    //TBH.. not sure how blocks/other data is getting stored
+    @Override
+    public Block getBlock(int x, int y, int z) {
+        //TODO: Write block retrieval
+        return null;
     }
 }
