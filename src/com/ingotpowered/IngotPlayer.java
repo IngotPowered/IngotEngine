@@ -115,7 +115,7 @@ public class IngotPlayer implements Player {
         if (message.startsWith("/")) {
             String[] split = message.split(" ");
             final String command = split[0].substring(1);
-            final String[] args = new String[message.length() - 1];
+            final String[] args = new String[split.length - 1];
             System.arraycopy(split, 1, args, 0, args.length);
             final PlayerCommandEvent event = new PlayerCommandEvent(this, command, args);
             IngotServer.server.eventFactory.callEvent(event, new Runnable() {
