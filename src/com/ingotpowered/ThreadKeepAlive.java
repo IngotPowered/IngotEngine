@@ -21,7 +21,7 @@ public class ThreadKeepAlive extends Thread {
             Iterator<IngotPlayer> iterator = players.iterator();
             while (iterator.hasNext()) {
                 IngotPlayer p = iterator.next();
-                if (System.currentTimeMillis() - p.packetHandler.waitingPingId >= 30000) {
+                if (System.currentTimeMillis() - p.packetHandler.pingSentTimestamp >= 30000) {
                     p.kick("Did not respond to ping in time");
                     continue;
                 }
