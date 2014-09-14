@@ -71,11 +71,10 @@ public class IngotPlayer implements Player {
         final PlayerLoginEvent event = new PlayerLoginEvent(this);
         IngotServer.server.eventFactory.callEvent(event, null);
 
-        // Chunk Test
-        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
-        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[Short.MAX_VALUE]));
-        channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 1, (short) 0, new byte[] { }));
-        channel.pipeline().writeAndFlush(new Packet38ChunkBulk(false, 0, 0, 1, (short) 0, new byte[] { }));
+        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
+        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[Short.MAX_VALUE]));
+        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 1, (short) 0, new byte[] { }));
+        // channel.pipeline().writeAndFlush(new Packet38ChunkBulk(false, 0, 0, 1, (short) 0, new byte[] { }));
     }
 
     public void playerDisconnected() {

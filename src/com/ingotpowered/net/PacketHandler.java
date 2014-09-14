@@ -151,7 +151,6 @@ public class PacketHandler {
             ingotPlayer.ping = System.currentTimeMillis() - pingSentTimestamp;
             ingotPlayer.packetHandler.waitingPingId = -1;
         }
-        System.out.println("Got ping!");
     }
 
     public void clientSettings(Packet15ClientSettings packet) {
