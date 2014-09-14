@@ -25,6 +25,9 @@ public class ThreadKeepAlive extends Thread {
                     p.kick("Did not respond to ping in time");
                     continue;
                 }
+                if (p.packetHandler.waitingPingId > 0) {
+                    continue;
+                }
                 p.packetHandler.waitingPingId = random.nextInt();
                 p.channel.pipeline().writeAndFlush(new Packet0KeepAlive(p.packetHandler.waitingPingId)).syncUninterruptibly();
                 p.packetHandler.pingSentTimestamp = System.currentTimeMillis();

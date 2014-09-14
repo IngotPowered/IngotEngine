@@ -110,6 +110,25 @@ public class IngotPlayer implements Player {
     }
 
     public void playerChat(String message) {
+        if (message.trim().equals("")) {
+            return;
+        }
+        if (message.startsWith("/")) {
+            String[] split = message.split(" ");
+            final String command = split[0].substring(1);
+            final String[] args = new String[message.length() - 1];
+            System.arraycopy(split, 1, args, 0, args.length);
+            final PlayerCommandEvent event = new PlayerCommandEvent(this, command, args);
+            IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+                public void run() {
+                    if (event.isCancelled()) {
+                        return;
+                    }
+                    IngotServer.server.commandRegistry.runPlayerCommand(IngotPlayer.this, command, args);
+                }
+            });
+            return;
+        }
         final PlayerChatEvent event = new PlayerChatEvent(this, message);
         IngotServer.server.eventFactory.callEvent(event, new Runnable() {
             public void run() {

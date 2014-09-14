@@ -136,7 +136,6 @@ public class PacketHandler {
                     ingotPlayer.base64Skin = hackSplit[17];
                     String uuid = hackSplit[3];
                     ingotPlayer.uuid = uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
-                    System.out.println("UUID: " + ingotPlayer.uuid);
                     ingotPlayer.playerAuthenticated();
                 }
             });
@@ -150,7 +149,9 @@ public class PacketHandler {
     public void keepAlive(Packet0KeepAlive packet) {
         if (packet.id == waitingPingId) {
             ingotPlayer.ping = System.currentTimeMillis() - pingSentTimestamp;
+            ingotPlayer.packetHandler.waitingPingId = -1;
         }
+        System.out.println("Got ping!");
     }
 
     public void clientSettings(Packet15ClientSettings packet) {
@@ -174,7 +175,7 @@ public class PacketHandler {
     }
 
     public void positionAndOrientationUpdate(PacketPlayerPosLook packet) {
-
+        ingotPlayer.updatePositionAndOrientation(packet.x, packet.feetY, packet.z, packet.yaw, packet.pitch);
     }
 
     public void heldItemChange(Packet9HeldItem packet) {
