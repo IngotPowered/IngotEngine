@@ -1,8 +1,10 @@
 package com.ingotpowered.world;
 
+import com.ingotpowered.api.Position;
 import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.LevelType;
+import com.ingotpowered.api.world.Block;
 import com.ingotpowered.api.world.Chunk;
 import com.ingotpowered.api.world.ChunkPosition;
 import com.ingotpowered.api.world.World;
@@ -58,5 +60,22 @@ public class IngotWorld implements World {
     @Override
     public Chunk getChunkAt(int x, int z) {
         return chunks.get(new ChunkPosition(x,z));
+    }
+
+    @Override
+    public Block getBlock(int x, int y, int z) {
+        int cx = x>>4;
+        int cz = z>>4;
+        return getChunkAt(x,z).getBlock(x-(cx<<4),y,z-(cz<<4));
+    }
+
+    @Override
+    public Block getBlock(double x, double y, double z) {
+        return getBlock(((int) x), ((int) y), ((int) z));
+    }
+
+    @Override
+    public Block getBlock(Position position) {
+        return getBlock(position.getX(),position.getY(),position.getZ());
     }
 }
