@@ -2,7 +2,9 @@ package com.ingotpowered.net;
 
 import com.ingotpowered.IngotPlayer;
 import com.ingotpowered.IngotServer;
+import com.ingotpowered.api.Ingot;
 import com.ingotpowered.api.events.list.PlayerLoginAttemptEvent;
+import com.ingotpowered.api.events.list.ServerPingEvent;
 import com.ingotpowered.net.codec.AesCodec;
 import com.ingotpowered.net.http.HttpHandler;
 import com.ingotpowered.net.http.HttpPostRequest;
@@ -64,13 +66,19 @@ public class PacketHandler {
     }
 
     // -- BEGIN Server List Ping --
-    public void statusRequest(Packet0Status packet) {
-        packet.description = IngotServer.server.config.getMOTD();
-        packet.maxPlayers = IngotServer.server.config.getMaxPlayers();
-        packet.onlineCount = 1;
-        packet.protocol = 47;
-        packet.version = "Use 1.8 to connect!";
-        ingotPlayer.channel.pipeline().writeAndFlush(packet);
+    public void statusRequest(final Packet0Status packet) {
+        // IngotServer event
+        final ServerPingEvent event = new ServerPingEvent(Ingot.VERSION_NAME, Ingot.PROTOCOL_VERSION, 0, IngotServer.server.config.getMaxPlayers(), IngotServer.server.config.getMOTD());
+        IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+            public void run() {
+                packet.description = event.getMOTD();
+                packet.maxPlayers = event.getMaxPlayers();
+                packet.onlineCount = event.getOnlinePlayersDisplayCount();
+                packet.protocol = event.getProtocol();
+                packet.version = event.getVersionName();
+                ingotPlayer.channel.pipeline().writeAndFlush(packet);
+            }
+        });
     }
 
     public void ping(Packet1Ping packet) {
