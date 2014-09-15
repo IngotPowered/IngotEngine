@@ -2,9 +2,10 @@ package com.ingotpowered.net.packets.play;
 
 import com.ingotpowered.net.PacketConstants;
 import com.ingotpowered.net.PacketHandler;
+import com.ingotpowered.net.packets.Packet;
 import io.netty.buffer.ByteBuf;
 
-public class Packet9HeldItem {
+public class Packet9HeldItem extends Packet {
 
     public int slotNumber = 0;
 

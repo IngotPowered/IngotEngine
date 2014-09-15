@@ -70,6 +70,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                     packet = new Packet5PlayerLook(); break;
                 case 6:
                     packet = new PacketPlayerPosLook(); break;
+                case 9:
+                    packet = new Packet9HeldItem(); break;
                 case 10:
                     packet = new Packet10Animation(); break;
                 case 11:
@@ -79,6 +81,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                 case 23:
                     packet = new PacketPluginMessage(); break;
                 default:
+                    System.out.println("Unknown packet ID: " + ident);
                     handler.ingotPlayer.kick("Unknown packet ID during play: " + ident);
                     throw new Exception("Unknown packet ID during PLAY " + ident);
             }

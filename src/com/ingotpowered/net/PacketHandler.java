@@ -3,6 +3,7 @@ package com.ingotpowered.net;
 import com.ingotpowered.IngotPlayer;
 import com.ingotpowered.IngotServer;
 import com.ingotpowered.api.Ingot;
+import com.ingotpowered.api.events.list.PlayerClickEvent;
 import com.ingotpowered.api.events.list.PlayerLoginAttemptEvent;
 import com.ingotpowered.api.events.list.ServerPingEvent;
 import com.ingotpowered.net.codec.AesCodec;
@@ -221,6 +222,7 @@ public class PacketHandler {
     }
 
     public void playerAnimation(Packet10Animation packet) {
-        ingotPlayer.sendMessage("You clicked something doe!");
+        final PlayerClickEvent event = new PlayerClickEvent(ingotPlayer);
+        IngotServer.server.eventFactory.callEvent(event, null);
     }
 }
