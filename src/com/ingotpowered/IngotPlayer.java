@@ -10,13 +10,18 @@ import com.ingotpowered.api.definitions.LevelType;
 import com.ingotpowered.api.entity.EntityAnimation;
 import com.ingotpowered.api.entity.Rideable;
 import com.ingotpowered.api.events.list.*;
+<<<<<<< HEAD
 import com.ingotpowered.api.world.World;
+=======
+import com.ingotpowered.api.world.ChunkPosition;
+>>>>>>> 7c14b65633ebe1efba9deda2ff615032cc740b21
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
 import com.ingotpowered.net.packets.login.Packet0Disconnect;
 import com.ingotpowered.net.packets.login.Packet2LoginSuccess;
 import com.ingotpowered.net.packets.play.*;
+import com.ingotpowered.world.IngotChunk;
 import io.netty.channel.socket.SocketChannel;
 
 import java.nio.charset.Charset;
@@ -64,6 +69,10 @@ public class IngotPlayer implements Player {
         response.uuid = uuid;
         channel.pipeline().write(response);
         packetCodec.protoState = ProtoState.PLAY;
+
+        IngotChunk testChunk = new IngotChunk(new ChunkPosition(0, 0));
+        channel.pipeline().writeAndFlush(new Packet38ChunkBulk(true, 1, 0, 0, (short) ((1 << 16) - 1), testChunk.getChunkData()));
+
         channel.pipeline().write(new PacketPluginMessage("MC|Brand", "Ingot".getBytes(Charset.forName("UTF-8"))));
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
         channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
@@ -73,6 +82,8 @@ public class IngotPlayer implements Player {
         // IngotServer Event
         final PlayerLoginEvent event = new PlayerLoginEvent(this);
         IngotServer.server.eventFactory.callEvent(event, null);
+
+
 
         // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
         // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[Short.MAX_VALUE]));

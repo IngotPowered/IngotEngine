@@ -30,7 +30,7 @@ public class Packet38ChunkBulk extends Packet {
         out.writeInt(this.chunkXCoord);
         out.writeInt(this.chunkZCoord);
         out.writeShort(this.bitmask);
-        PacketConstants.writeVarInt(out, this.map.length);
+        //PacketConstants.writeVarInt(out, this.map.length);
         out.writeBytes(this.map);
     }
 
