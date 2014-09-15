@@ -10,11 +10,8 @@ import com.ingotpowered.api.definitions.LevelType;
 import com.ingotpowered.api.entity.EntityAnimation;
 import com.ingotpowered.api.entity.Rideable;
 import com.ingotpowered.api.events.list.*;
-<<<<<<< HEAD
 import com.ingotpowered.api.world.World;
-=======
 import com.ingotpowered.api.world.ChunkPosition;
->>>>>>> 7c14b65633ebe1efba9deda2ff615032cc740b21
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
