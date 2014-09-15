@@ -248,4 +248,8 @@ public class PacketHandler {
 
         }
     }
+
+    public void blockPlace(Packet8BlockPlace packet) {
+
+    }
 }

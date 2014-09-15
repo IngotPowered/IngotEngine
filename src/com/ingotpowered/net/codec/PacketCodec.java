@@ -72,6 +72,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                     packet = new PacketPlayerPosLook(); break;
                 case 7:
                     packet = new Packet7DigBlock(); break;
+                case 8:
+                    packet = new Packet8BlockPlace(); break;
                 case 9:
                     packet = new Packet9HeldItem(); break;
                 case 10:
