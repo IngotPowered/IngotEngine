@@ -62,6 +62,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                     packet = new Packet0KeepAlive(); break;
                 case 1:
                     packet = new PacketChat(); break;
+                case 2:
+                    packet = new Packet2UseEntity(); break;
                 case 3:
                     packet = new Packet3GroundStatus(); break;
                 case 4:

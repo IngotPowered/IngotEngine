@@ -252,4 +252,8 @@ public class PacketHandler {
     public void blockPlace(Packet8BlockPlace packet) {
 
     }
+
+    public void playerUseEntity(Packet2UseEntity packet) {
+
+    }
 }
