@@ -7,7 +7,10 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
+import com.ingotpowered.api.entity.EntityAnimation;
+import com.ingotpowered.api.entity.Rideable;
 import com.ingotpowered.api.events.list.*;
+import com.ingotpowered.api.world.World;
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
@@ -188,6 +191,50 @@ public class IngotPlayer implements Player {
         channel.close();
     }
 
+    public void teleport(Position position) {
+
+    }
+
+    public void teleport(Position position, World world) {
+
+    }
+
+    public void teleport(Position position, Orientation orientation) {
+
+    }
+
+    public void teleport(Position position, World world, Orientation orientation) {
+
+    }
+
+    public void mount(Rideable rideable) {
+
+    }
+
+    public void dismount() {
+
+    }
+
+    public void moveRelative(double x, double y, double z) {
+
+    }
+
+    public void setOrientation(Orientation orientation) {
+
+    }
+
+    public void moveRelative(double x, double y, double z, Orientation orientation) {
+
+    }
+
+    public void sendStatus(EntityAnimation animation) {
+
+    }
+
+    public int getId() {
+        return -1;
+    }
+
     public boolean isOnGround() {
         return onGround;
     }
@@ -210,5 +257,17 @@ public class IngotPlayer implements Player {
 
     public Position getCompassSpawnPosition() {
         return compassSpawnPosition;
+    }
+
+    public boolean isAlive() {
+        return true;
+    }
+
+    public Position getPosition() {
+        return new Position(x, y, z);
+    }
+
+    public Orientation getOrientation() {
+        return new Orientation(yaw, pitch);
     }
 }
