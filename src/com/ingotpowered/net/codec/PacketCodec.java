@@ -70,6 +70,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
                     packet = new Packet5PlayerLook(); break;
                 case 6:
                     packet = new PacketPlayerPosLook(); break;
+                case 7:
+                    packet = new Packet7DigBlock(); break;
                 case 9:
                     packet = new Packet9HeldItem(); break;
                 case 10:

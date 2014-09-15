@@ -3,6 +3,7 @@ package com.ingotpowered.net;
 import com.ingotpowered.IngotPlayer;
 import com.ingotpowered.IngotServer;
 import com.ingotpowered.api.Ingot;
+import com.ingotpowered.api.Position;
 import com.ingotpowered.api.events.list.PlayerClickEvent;
 import com.ingotpowered.api.events.list.PlayerLoginAttemptEvent;
 import com.ingotpowered.api.events.list.ServerPingEvent;
@@ -222,7 +223,29 @@ public class PacketHandler {
     }
 
     public void playerAnimation(Packet10Animation packet) {
-        final PlayerClickEvent event = new PlayerClickEvent(ingotPlayer);
+        final PlayerClickEvent event = new PlayerClickEvent(ingotPlayer, null, (byte) -1);
         IngotServer.server.eventFactory.callEvent(event, null);
+    }
+
+    public void digBlockStatus(Packet7DigBlock packet) {
+        if (packet.status < 0 || packet.status > 5) {
+            ingotPlayer.kick("Invalid dig packet status!");
+            ingotPlayer.channel.close();
+            return;
+        }
+        if (packet.status == 0 || packet.status == 1) { // Interact event
+            final PlayerClickEvent event = new PlayerClickEvent(ingotPlayer, Position.fromLong(packet.position), packet.face);
+            IngotServer.server.eventFactory.callEvent(event, new Runnable() {
+                public void run() {
+                    // Call setBlock to reset the block
+                }
+            });
+        } else if (packet.status == 2) { // Block break
+
+        } else if (packet.status == 3 || packet.status == 4) { // Drop item stack, item, respectively
+
+        } else if (packet.status == 5) { // Shoot arrow or finish eating - check item in hand
+
+        }
     }
 }
