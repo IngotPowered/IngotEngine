@@ -8,6 +8,7 @@ import com.ingotpowered.net.packets.Packet;
 import com.ingotpowered.net.packets.play.PacketChat;
 import com.ingotpowered.world.ChunkThread;
 import com.ingotpowered.net.NetManager;
+import com.ingotpowered.world.IngotWorldManager;
 
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +24,7 @@ public class IngotServer extends Ingot {
 
     public Config config = new Config();
     public ConcurrentHashMap<String, IngotPlayer> playerMap = new ConcurrentHashMap<String, IngotPlayer>();
+    public IngotWorldManager worldManager;
     public NetManager netManager = new NetManager(playerMap);
     public ThreadKeepAlive threadKeepAlive = new ThreadKeepAlive();
     public ChunkThread[] chunkThreads = new ChunkThread[Runtime.getRuntime().availableProcessors()];
@@ -89,5 +91,9 @@ public class IngotServer extends Ingot {
 
     public EventFactory getEventFactory() {
         return eventFactory;
+    }
+
+    public IngotWorldManager getWorldManager() {
+        return worldManager;
     }
 }

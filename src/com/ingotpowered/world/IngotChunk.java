@@ -32,8 +32,7 @@ public class IngotChunk implements Chunk {
         return y * (WIDTH * HEIGHT) + (z * WIDTH) + x;
     }
 
-    private Position getPositionData(int data)
-    {
+    private Position getPositionData(int data) {
         int rm = data % (WIDTH * HEIGHT);
         int y = (data - rm) / (WIDTH * HEIGHT);
         int rm2 = rm % WIDTH;
@@ -70,23 +69,22 @@ public class IngotChunk implements Chunk {
 
     public byte[] getChunkData() {
 
-        //byte[] data = new byte[(((4096 * 5 / 2) + 2048) * 16) + 256];
-        byte[] data = new byte[(4096 + 2048 + 2048 + 2048 + 0) * 16 + 256];
-        int pos = blockIDs.length;
-        /*
-        for (int i = 0; i < blockIDs.length; i++)
-        {
+        byte[] data = new byte[(((4096 * 5 / 2) + 2048) * 16) + 256];
+        //byte[] data = new byte[(4096 + 2048 + 2048 + 2048 + 0) * 16 + 256];
+        int pos = 0;
+
+        for (int i = 0; i < blockIDs.length; i++) {
             byte type = 2 << 4;// blockIDs[i];
             type = (byte)((type & 0xfff0) | blockData[i]);
             data[pos++] = (byte)(type & 0xff);
             data[pos++] = (byte)(type >> 8);
-        } */
-        System.arraycopy(blockIDs, 0, data, 0, blockIDs.length);
+        }
+        /*System.arraycopy(blockIDs, 0, data, 0, blockIDs.length);
         for (int i = 0; i < blockData.length; i += 2) {
             byte meta1 = blockData[i];
             byte meta2 = blockData[i + 1];
             data[pos++] = (byte) ((meta2 << 4) | meta1);
-        }
+        }*/
 
         // skylight TODO
         for (int i = 0; i < skyLight.length; i += 2) {

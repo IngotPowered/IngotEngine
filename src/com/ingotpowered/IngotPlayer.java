@@ -68,7 +68,7 @@ public class IngotPlayer implements Player {
         packetCodec.protoState = ProtoState.PLAY;
 
         IngotChunk testChunk = new IngotChunk(new ChunkPosition(0, 0));
-        channel.pipeline().writeAndFlush(new Packet38ChunkBulk(true, 1, 0, 0, (short) ((1 << 16) - 1), testChunk.getChunkData()));
+        //
 
         channel.pipeline().write(new PacketPluginMessage("MC|Brand", "Ingot".getBytes(Charset.forName("UTF-8"))));
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
@@ -76,16 +76,11 @@ public class IngotPlayer implements Player {
         channel.pipeline().write(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
         channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0)); // We're ready to spawn!
 
+        channel.pipeline().writeAndFlush(new Packet38ChunkBulk(true, 1, 0, 0, (short) (testChunk.getChunkData().length & 0xFFFFFF), testChunk.getChunkData()));
+
         // IngotServer Event
         final PlayerLoginEvent event = new PlayerLoginEvent(this);
         IngotServer.server.eventFactory.callEvent(event, null);
-
-
-
-        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
-        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[Short.MAX_VALUE]));
-        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 1, (short) 0, new byte[] { }));
-        // channel.pipeline().writeAndFlush(new Packet38ChunkBulk(false, 0, 0, 1, (short) 0, new byte[] { }));
     }
 
     public void playerDisconnected() {

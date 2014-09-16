@@ -24,7 +24,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     }
 
     protected void encode(ChannelHandlerContext context, Packet packet, ByteBuf buf) throws Exception {
-        if(packet instanceof Packet38ChunkBulk) System.out.println(packet.toString());
+        if (packet instanceof Packet38ChunkBulk) System.out.println(packet.toString());
         packet.write(buf);
     }
 
