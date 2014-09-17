@@ -7,9 +7,11 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
+import com.ingotpowered.api.entity.EntityTickManager;
+import com.ingotpowered.api.events.list.*;
+import com.ingotpowered.entity.IngotEntity;
 import com.ingotpowered.api.entity.EntityAnimation;
 import com.ingotpowered.api.entity.Rideable;
-import com.ingotpowered.api.events.list.*;
 import com.ingotpowered.api.world.World;
 import com.ingotpowered.api.world.ChunkPosition;
 import com.ingotpowered.net.PacketHandler;
@@ -23,7 +25,7 @@ import io.netty.channel.socket.SocketChannel;
 
 import java.nio.charset.Charset;
 
-public class IngotPlayer implements Player {
+public class IngotPlayer extends IngotEntity implements Player {
 
     public static final String JSON_CHAT_MESSAGE_BASE = "{\"text\":\"${message}\"}";
 
@@ -43,11 +45,6 @@ public class IngotPlayer implements Player {
     public byte displaySkinParts;
     public long ping = 0;
     public boolean onGround = false;
-    public double x = 0d;
-    public double y = 0d;
-    public double z = 0d;
-    public float yaw = 0f;
-    public float pitch = 0f;
     public boolean crouched = false;
     public boolean sprinting = false;
 
@@ -260,6 +257,17 @@ public class IngotPlayer implements Player {
 
     public Position getCompassSpawnPosition() {
         return compassSpawnPosition;
+    }
+
+
+    @Override
+    public EntityTickManager getTickManager() {
+        return null;
+    }
+
+    @Override
+    public void setTickManager(EntityTickManager manager) {
+        //DO NOTHING!
     }
 
     public boolean isAlive() {
