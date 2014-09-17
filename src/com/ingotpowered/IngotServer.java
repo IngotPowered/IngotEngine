@@ -4,10 +4,10 @@ import com.ingotpowered.api.Config;
 import com.ingotpowered.api.Ingot;
 import com.ingotpowered.api.commands.CommandRegistry;
 import com.ingotpowered.api.events.EventFactory;
+import com.ingotpowered.net.NetManager;
 import com.ingotpowered.net.packets.Packet;
 import com.ingotpowered.net.packets.play.PacketChat;
 import com.ingotpowered.world.ChunkThread;
-import com.ingotpowered.net.NetManager;
 
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
