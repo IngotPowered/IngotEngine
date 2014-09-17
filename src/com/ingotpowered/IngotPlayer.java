@@ -40,11 +40,6 @@ public class IngotPlayer extends Entity implements Player {
     public byte displaySkinParts;
     public long ping = 0;
     public boolean onGround = false;
-    public double x = 0d;
-    public double y = 0d;
-    public double z = 0d;
-    public float yaw = 0f;
-    public float pitch = 0f;
     public boolean crouched = false;
     public boolean sprinting = false;
 
