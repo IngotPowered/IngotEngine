@@ -7,9 +7,9 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
-import com.ingotpowered.api.entity.Entity;
 import com.ingotpowered.api.entity.EntityTickManager;
 import com.ingotpowered.api.events.list.*;
+import com.ingotpowered.entity.IngotEntity;
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
@@ -20,7 +20,7 @@ import io.netty.channel.socket.SocketChannel;
 
 import java.nio.charset.Charset;
 
-public class IngotPlayer extends Entity implements Player {
+public class IngotPlayer extends IngotEntity implements Player {
 
     public static final String JSON_CHAT_MESSAGE_BASE = "{\"text\":\"${message}\"}";
 
