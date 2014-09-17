@@ -8,11 +8,7 @@ import com.ingotpowered.net.NetManager;
 import com.ingotpowered.net.packets.Packet;
 import com.ingotpowered.net.packets.play.PacketChat;
 import com.ingotpowered.world.ChunkThread;
-<<<<<<< HEAD
-=======
-import com.ingotpowered.net.NetManager;
 import com.ingotpowered.world.IngotWorldManager;
->>>>>>> upstream/master
 
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;

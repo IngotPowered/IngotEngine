@@ -7,17 +7,13 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
-<<<<<<< HEAD
 import com.ingotpowered.api.entity.EntityTickManager;
 import com.ingotpowered.api.events.list.*;
 import com.ingotpowered.entity.IngotEntity;
-=======
 import com.ingotpowered.api.entity.EntityAnimation;
 import com.ingotpowered.api.entity.Rideable;
-import com.ingotpowered.api.events.list.*;
 import com.ingotpowered.api.world.World;
 import com.ingotpowered.api.world.ChunkPosition;
->>>>>>> upstream/master
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
@@ -263,7 +259,7 @@ public class IngotPlayer extends IngotEntity implements Player {
         return compassSpawnPosition;
     }
 
-<<<<<<< HEAD
+
     @Override
     public EntityTickManager getTickManager() {
         return null;
@@ -272,7 +268,8 @@ public class IngotPlayer extends IngotEntity implements Player {
     @Override
     public void setTickManager(EntityTickManager manager) {
         //DO NOTHING!
-=======
+    }
+
     public boolean isAlive() {
         return true;
     }
@@ -283,6 +280,5 @@ public class IngotPlayer extends IngotEntity implements Player {
 
     public Orientation getOrientation() {
         return new Orientation(yaw, pitch);
->>>>>>> upstream/master
     }
 }
