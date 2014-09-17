@@ -7,15 +7,24 @@ import com.ingotpowered.api.definitions.Difficulty;
 import com.ingotpowered.api.definitions.Dimension;
 import com.ingotpowered.api.definitions.GameMode;
 import com.ingotpowered.api.definitions.LevelType;
+<<<<<<< HEAD
 import com.ingotpowered.api.entity.EntityTickManager;
 import com.ingotpowered.api.events.list.*;
 import com.ingotpowered.entity.IngotEntity;
+=======
+import com.ingotpowered.api.entity.EntityAnimation;
+import com.ingotpowered.api.entity.Rideable;
+import com.ingotpowered.api.events.list.*;
+import com.ingotpowered.api.world.World;
+import com.ingotpowered.api.world.ChunkPosition;
+>>>>>>> upstream/master
 import com.ingotpowered.net.PacketHandler;
 import com.ingotpowered.net.ProtoState;
 import com.ingotpowered.net.codec.PacketCodec;
 import com.ingotpowered.net.packets.login.Packet0Disconnect;
 import com.ingotpowered.net.packets.login.Packet2LoginSuccess;
 import com.ingotpowered.net.packets.play.*;
+import com.ingotpowered.world.IngotChunk;
 import io.netty.channel.socket.SocketChannel;
 
 import java.nio.charset.Charset;
@@ -58,20 +67,21 @@ public class IngotPlayer extends IngotEntity implements Player {
         response.uuid = uuid;
         channel.pipeline().write(response);
         packetCodec.protoState = ProtoState.PLAY;
+
+        IngotChunk testChunk = new IngotChunk(new ChunkPosition(0, 0));
+        //
+
         channel.pipeline().write(new PacketPluginMessage("MC|Brand", "Ingot".getBytes(Charset.forName("UTF-8"))));
         channel.pipeline().write(new Packet5Spawn(new Position(0, 6, 0)));
         channel.pipeline().write(new Packet57ClientAbilities(false, true, true, false, 2F, 2F));
         channel.pipeline().write(new Packet1JoinGame(89, GameMode.SURVIVAL, Dimension.OVERWORLD, Difficulty.EASY, 80, LevelType.DEFAULT, true));
         channel.pipeline().writeAndFlush(new PacketPlayerPosLook(0, 16, 0, 20, 20, (byte) 0)); // We're ready to spawn!
 
+        channel.pipeline().writeAndFlush(new Packet38ChunkBulk(true, 1, 0, 0, (short) (testChunk.getChunkData().length & 0xFFFFFF), testChunk.getChunkData()));
+
         // IngotServer Event
         final PlayerLoginEvent event = new PlayerLoginEvent(this);
         IngotServer.server.eventFactory.callEvent(event, null);
-
-        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 0, 0, (short) 0, new byte[Short.MAX_VALUE]));
-        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 0, (short) 0, new byte[Short.MAX_VALUE]));
-        // channel.pipeline().write(new Packet38ChunkBulk(false, 0, 1, 1, (short) 0, new byte[] { }));
-        // channel.pipeline().writeAndFlush(new Packet38ChunkBulk(false, 0, 0, 1, (short) 0, new byte[] { }));
     }
 
     public void playerDisconnected() {
@@ -185,6 +195,50 @@ public class IngotPlayer extends IngotEntity implements Player {
         channel.close();
     }
 
+    public void teleport(Position position) {
+
+    }
+
+    public void teleport(Position position, World world) {
+
+    }
+
+    public void teleport(Position position, Orientation orientation) {
+
+    }
+
+    public void teleport(Position position, World world, Orientation orientation) {
+
+    }
+
+    public void mount(Rideable rideable) {
+
+    }
+
+    public void dismount() {
+
+    }
+
+    public void moveRelative(double x, double y, double z) {
+
+    }
+
+    public void setOrientation(Orientation orientation) {
+
+    }
+
+    public void moveRelative(double x, double y, double z, Orientation orientation) {
+
+    }
+
+    public void sendStatus(EntityAnimation animation) {
+
+    }
+
+    public int getId() {
+        return -1;
+    }
+
     public boolean isOnGround() {
         return onGround;
     }
@@ -209,6 +263,7 @@ public class IngotPlayer extends IngotEntity implements Player {
         return compassSpawnPosition;
     }
 
+<<<<<<< HEAD
     @Override
     public EntityTickManager getTickManager() {
         return null;
@@ -217,5 +272,17 @@ public class IngotPlayer extends IngotEntity implements Player {
     @Override
     public void setTickManager(EntityTickManager manager) {
         //DO NOTHING!
+=======
+    public boolean isAlive() {
+        return true;
+    }
+
+    public Position getPosition() {
+        return new Position(x, y, z);
+    }
+
+    public Orientation getOrientation() {
+        return new Orientation(yaw, pitch);
+>>>>>>> upstream/master
     }
 }
