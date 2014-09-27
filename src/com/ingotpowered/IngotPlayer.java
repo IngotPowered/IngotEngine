@@ -238,6 +238,14 @@ public class IngotPlayer extends IngotEntity implements Player {
     public boolean isOnGround() {
         return onGround;
     }
+    
+    public boolean isSprinting() {
+        return sprinting;
+    }
+    
+    public boolean isCrouching() {
+        return crouched;
+    }
 
     public long getPing() {
         return ping;
